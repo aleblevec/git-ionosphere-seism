@@ -57,8 +57,8 @@ def read(files):
     
     df = df[["tsn", "el", "az", "tec"]]
     
-    df = df[1320 < df["tsn"]]
-    return df[df["tsn"] < 1393]
+    df = df[2320 < df["tsn"]]
+    return df[df["tsn"] < 2593]
 
 # =============================================================================
 # Concaténation des fichiers de chaque station dans un dataframe en fonction de 
