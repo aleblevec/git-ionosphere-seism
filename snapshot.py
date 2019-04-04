@@ -148,10 +148,10 @@ df_vtecr.columns = stations
 #print (df_vtecr)
 
 # valeurs tec : -1.5 -> 0.8
+fig = plt.figure()
 
 for i in range (1, 8):
     a = i * 10
-#    print (a)
     lon = np.degrees(df_lon.iloc[a:a+1].values.flatten())
     lat = np.degrees(df_lat.iloc[a:a+1].values.flatten())
     tec = df_vtecr.iloc[a:a+1].values.flatten()
@@ -161,7 +161,7 @@ for i in range (1, 8):
             'tec': tec}
     frame = pd.DataFrame(data)
     
-    plt.subplot(2,4,i)
+    fig.add_subplot(2,4,i)
     m = f1.basic_nz_map()
     x, y = m(lon, lat)
     m.hexbin(x,
@@ -173,9 +173,11 @@ for i in range (1, 8):
              vmin=-1.5, vmax=0.8)
     plt.title('tec at epoque {0}'.format(a))
 
-cb = m.colorbar(pad='20%', label='tec')
-#cb.set_ticks([-1.5, -1, -0.5, 0, 0.5, 1])
+cbaxes = fig.add_axes([0.94, 0.1, 0.01, 0.8]) 
+cb = plt.colorbar(cax = cbaxes)
+m.colorbar()
 plt.show()
+
 
 
 
