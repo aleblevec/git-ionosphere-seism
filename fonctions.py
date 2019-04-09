@@ -17,10 +17,11 @@ import csv
 from os import chdir 
 from matplotlib.font_manager import FontProperties
 from mpl_toolkits.basemap import Basemap
-import fonction_1 as f1
 from scipy.signal import butter, lfilter
 import matplotlib.animation as animation
 from labellines import labelLine, labelLines
+import pandas as pd
+
 
 
 # =============================================================================
@@ -263,12 +264,12 @@ def basic_nz_map() :
     # =============================================================================
     # Plot des stations sur le fond de carte  
     # =============================================================================
-    for j in range (len(lon)) : 
-        xpt,ypt = m(lon[j],lat[j])
-        m.plot(xpt,ypt,'wo', ms = 1) 
-        plt.text(xpt+10000,ypt+10000,'%s' %station[j], color = 'white', fontsize = 5)
-        expt, eypt = m(elon,elat)
-        m.plot(expt,eypt,'r*', ms = 7)
+#    for j in range (len(lon)) : 
+#        xpt,ypt = m(lon[j],lat[j])
+#        m.plot(xpt,ypt,'wo', ms = 1) 
+#        plt.text(xpt+10000,ypt+10000,'%s' %station[j], color = 'white', fontsize = 5)
+#        expt, eypt = m(elon,elat)
+#        m.plot(expt,eypt,'r*', ms = 7)
 
     return m 
 
@@ -385,6 +386,8 @@ def basic_nz_map_anim() :
         m.plot(expt,eypt,'r*', ms = 7)
 
     return m 
+
+
 # =============================================================================
 # Varion TEC and VTEC from RINEX fonction for animation
 # =============================================================================
@@ -400,6 +403,24 @@ def tec_anim(d, courbe_1, courbe_2) :
 #    plt.savefig('/Users/antoineleblevec/Desktop/2016_seism/anim_tec.png')
 #    plt.show() 
     return delta_tec
+
+# =============================================================================
+# Lecture des dataframes
+# =============================================================================
+def read(files, epoque1, epoque2):
+    df = pd.read_csv(
+            files,
+            skiprows=11,
+            delim_whitespace=True,
+            header=None,
+            names=["tsn", "hour", "el", "az", "tec", "tec.p1p2", "validity"]
+            )
+    
+    df = df[["tsn", "el", "az", "tec"]]
+    
+    df = df[epoque1 < df["tsn"]]
+    return df[df["tsn"] < epoque2]
+
 
 
 
