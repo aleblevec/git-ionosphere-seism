@@ -404,6 +404,104 @@ def tec_anim(d, courbe_1, courbe_2) :
 #    plt.show() 
     return delta_tec
 
+#def lecture_lat_lon_sat_anim(name_dir, files): 
+#        with open(name_dir + '/' + files[14],'r') as fich:
+#            for j in range(7):
+#                ligne = fich.readline()
+#        liste_mots = ligne.split(":")
+#        mot=liste_mots[1]
+#        liste_bis_mots = mot.split(",")
+#        rlon = np.radians(float(liste_bis_mots[0])) #longitude de la station
+#        rlat = np.radians(float(liste_bis_mots[1])) #lattitude de la station
+#        return(rlon, rlat)
+## =============================================================================
+##Fonction plot Nouvelle-Zélande pour l'animation
+## =============================================================================
+#def plot_nz_anim(lon, lat, station, lon_sat_seism, lat_sat_seism, type_sat) : 
+# 
+#        
+#        bmap = basic_nz_map()
+#        plt.title('Trace du R07')
+#        x, y = bmap(np.degrees(lon), np.degrees(lat))
+#        
+##        m.plot(x, y)
+##        u, v = m(np.degrees(lon_sat_seism), np.degrees(lat_sat_seism))
+##        m.plot(u, v, 'w*', ms = 5)
+##        plt.legend(bbox_to_anchor=(1.3, 1), loc='upper left', 
+##                   borderaxespad=0., fancybox = True, shadow = True)
+#        
+#        return bmap
+## =============================================================================
+## Création du fond de carte de NZ pour l'animation
+## =============================================================================
+#def basic_nz_map_anim() : 
+#    
+#    # =============================================================================
+#    # Lecture du fichier en deux fois pour problème de type
+#    # =============================================================================
+#    datat = np.loadtxt('/Users/antoineleblevec/Desktop/2016_seism/coord_stations.txt', usecols = (1,2,3,4,5))
+#    data = open('/Users/antoineleblevec/Desktop/2016_seism/coord_stations.txt', "r")
+#    # =============================================================================
+#    # Stockage des noms des stations dans : station 
+#    # =============================================================================
+#    contenu = data.readlines()
+#    station = []
+#    for j in range (36) : 
+#        list = contenu[j].split()
+#        station.append(list [0])
+#    # =============================================================================
+#    # Stockage des latitudes et longitudes des stations dans lon et lat
+#    # =============================================================================
+#    lon = []
+#    lat = []
+#    for i in datat : 
+#        lon.append(i[4])
+#        lat.append(i[3])
+#    # =============================================================================
+#    # Epicentre longitude latitude 
+#    # =============================================================================
+#    elon = 173.054
+#    elat = -42.737
+#    # =============================================================================
+#    # Plot du fond de carte de nouvelle-zélande
+#    # =============================================================================
+#    m = Basemap(width=1500000,height=1500000,projection='lcc',
+#                    resolution='c',lat_1=-80.,lat_2=-20,lat_0=-40,lon_0=176.)
+#    m.drawcoastlines()
+#    m.drawstates()
+#    m.drawcountries()
+#    parallels = np.arange(-60, -30, 5.)
+#    m.drawparallels(parallels, labels = [False,True,True,False], dashes = [1,5], linewidth = 0.5)
+#    meridians = np.arange(160., 190., 5.)
+#    m.drawmeridians(meridians, labels = [True, False, False, True], dashes = [1,5], linewidth = 0.5 )
+#    m.bluemarble()
+#    # =============================================================================
+#    # Plot des stations sur le fond de carte  
+#    # =============================================================================
+#    for j in range (len(lon)) : 
+#        xpt,ypt = m(lon[j],lat[j])
+#        m.plot(xpt,ypt,'wo', ms = 1) 
+#        plt.text(xpt+10000,ypt+10000,'%s' %station[j], color = 'white', fontsize = 5)
+#        expt, eypt = m(elon,elat)
+#        m.plot(expt,eypt,'r*', ms = 7)
+#
+#    return m 
+## =============================================================================
+## Varion TEC and VTEC from RINEX fonction for animation
+## =============================================================================
+#def tec_anim(d, courbe_1, courbe_2) : 
+#    plt.xlabel('Temps IUT (h)')
+#    plt.ylabel('TEC (TECU)')
+#    plt.title('TEC and VTEC measured by Glonass R21')
+#    plt.plot(d, courbe_1, label = "tec", color = 'green')
+#    plt.plot(d, courbe_2, label = "vtec", color = 'blue')
+#    plt.axvline(x = 11.033, color = 'red', label = "seism", linestyle = ':')
+#    delta_tec = plt.legend()
+##    plt.gcf()
+##    plt.savefig('/Users/antoineleblevec/Desktop/2016_seism/anim_tec.png')
+##    plt.show() 
+#    return delta_tec
+
 # =============================================================================
 # Lecture des dataframes
 # =============================================================================
