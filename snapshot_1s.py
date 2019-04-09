@@ -10,6 +10,7 @@ import pandas as pd
 from functools import reduce 
 import numpy as np
 import matplotlib.pyplot as plt
+import time 
 
 from scipy.signal import savgol_filter
 
@@ -18,6 +19,7 @@ import fonctions as f1
 # =============================================================================
 # Constantes 
 # =============================================================================
+start_time = time.time()
 Re = 6371032 
 H = 350e3
 lllat = 31.7; urlat = 43.7; lllon = 130.6; urlon = 145.6
@@ -99,31 +101,33 @@ df_vtecr = df_vtec - df_vtecf
 ####### =============================================================================
 ####### plot valeurs tec : -.5 -> 0.6
 ####### =============================================================================
-fig = plt.figure()
-for i in range (1,719):
-    lon = np.degrees(df_lon.iloc[i:i+1].values.flatten())
-    lat = np.degrees(df_lat.iloc[i:i+1].values.flatten())
-    tec = df_vtecr.iloc[i:i+1].values.flatten()
-    
-    data = {'lon' : lon,
-            'lat' : lat,
-            'tec': tec}
-    frame = pd.DataFrame(data)
-    
-    fig.add_subplot(4,6,i)
-    m = f1.basic_nz_map()
-    x, y = m(lon, lat)
-    m.hexbin(x,
-             y,
-             C=tec,
-             reduce_C_function=np.mean,
-             gridsize=20, 
-             cmap="viridis", 
-             vmin=-0.26, vmax=0.25)
-    plt.title('tec at epoque {0}'.format(epoque1+i))
+#fig = plt.figure()
+#for i in range (1,719):
+#    lon = np.degrees(df_lon.iloc[i:i+1].values.flatten())
+#    lat = np.degrees(df_lat.iloc[i:i+1].values.flatten())
+#    tec = df_vtecr.iloc[i:i+1].values.flatten()
+#    
+#    data = {'lon' : lon,
+#            'lat' : lat,
+#            'tec': tec}
+#    frame = pd.DataFrame(data)
+#    
+#    fig.add_subplot(27,27,i)
+#    m = f1.basic_nz_map()
+#    x, y = m(lon, lat)
+#    m.hexbin(x,
+#             y,
+#             C=tec,
+#             reduce_C_function=np.mean,
+#             gridsize=20, 
+#             cmap="viridis", 
+#             vmin=-0.057, vmax=0.043)
+#    plt.title('tec at epoque {0}'.format(epoque1+i))
+#
+##positionnement de la colorbar
+#cbaxes = fig.add_axes([0.94, 0.1, 0.01, 0.8]) 
+#cb = plt.colorbar(cax = cbaxes)
+#m.colorbar()
+#plt.show()
 
-#positionnement de la colorbar
-cbaxes = fig.add_axes([0.94, 0.1, 0.01, 0.8]) 
-cb = plt.colorbar(cax = cbaxes)
-m.colorbar()
-plt.show()
+print("--- %s seconds ---" % (time.time() - start_time))
