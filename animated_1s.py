@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Tue Apr  9 11:07:22 2019
+Created on Tue Apr  9 11:46:22 2019
 
 @author: antoineleblevec
 """
@@ -27,8 +27,8 @@ H = 350e3
 lllat = 31.7; urlat = 43.7; lllon = 130.6; urlon = 145.6
 window = 27
 order = 4
-epoque1 = 40320
-epoque2 = 41040
+epoque1 = 39600
+epoque2 = 43199
 
 # =============================================================================
 # Lecture du répertoire ; construction d'une liste avec nom des stations
@@ -99,22 +99,19 @@ df_tecr_reduit = df_tecr - df_tecr.apply(f1.minimum,axis=0)
 df_vtec = pd.np.multiply(df_tecr_reduit,np.cos(df_x))
 df_vtecf = savgol_filter(df_vtec,window,order,axis=0)
 df_vtecr = df_vtec - df_vtecf
-###
+print(max(df_vtecr.max()))
+### min without v47b : -0.0213447610165849
+### max withour v47b : 0.019251844721856037
 ####### =============================================================================
-####### plot valeurs tec : -.5 -> 0.6
+####### Plot
 ####### =============================================================================
-fig = plt.figure()
-for i in range (1,719):
-    lon = np.degrees(df_lon.iloc[i:i+1].values.flatten())
-    lat = np.degrees(df_lat.iloc[i:i+1].values.flatten())
-    tec = df_vtecr.iloc[i:i+1].values.flatten()
-    
-    data = {'lon' : lon,
-            'lat' : lat,
-            'tec': tec}
-    frame = pd.DataFrame(data)
-    
-    fig.add_subplot(27,27,i)
+for i in range (1,360):
+    a = i * 10
+    fig = plt.figure()
+    lon = np.degrees(df_lon.iloc[a:a+1].values.flatten())
+    lat = np.degrees(df_lat.iloc[a:a+1].values.flatten())
+    tec = df_vtecr.iloc[a:a+1].values.flatten()
+
     m = f1.basic_nz_map()
     x, y = m(lon, lat)
     m.hexbin(x,
@@ -123,13 +120,16 @@ for i in range (1,719):
              reduce_C_function=np.mean,
              gridsize=20, 
              cmap="viridis", 
-             vmin=-0.057, vmax=0.043)
-    plt.title('tec at epoque {0}'.format(epoque1+i))
+             vmin=-0.036, vmax=0.024)
 
 #positionnement de la colorbar
-cbaxes = fig.add_axes([0.94, 0.1, 0.01, 0.8]) 
-cb = plt.colorbar(cax = cbaxes)
-m.colorbar()
-plt.show()
+    plt.title('tec at epoque {0}'.format(epoque1+a))
+    cbaxes = fig.add_axes([0.90, 0.1, 0.01, 0.8]) 
+    cb = plt.colorbar(cax=cbaxes)
+    m.colorbar()
+    plt.gcf()
+    fig.savefig(f"/Users/antoineleblevec/Desktop/frames/frame_{i:04d}.png", 
+                frameon=False, pad_inches=0)
+    cbaxes.clear()
 
 print("--- %s seconds ---" % (time.time() - start_time))

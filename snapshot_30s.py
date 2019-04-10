@@ -24,8 +24,8 @@ H = 350e3
 lllat = 31.7; urlat = 43.7; lllon = 130.6; urlon = 145.6
 window = 27
 order = 4
-epoque1 = 1325
-epoque2 = 1367
+epoque1 = 1260
+epoque2 = 1560
 
 # =============================================================================
 # Lecture du répertoire ; construction d'une liste avec nom des stations
@@ -96,22 +96,19 @@ df_tecr_reduit = df_tecr - df_tecr.apply(f1.minimum,axis=0)
 df_vtec = pd.np.multiply(df_tecr_reduit,np.cos(df_x))
 df_vtecf = savgol_filter(df_vtec,window,order,axis=0)
 df_vtecr = df_vtec - df_vtecf
+print (max(df_vtecr.max()))
 ##
 ###### =============================================================================
 ###### plot valeurs tec : -.5 -> 0.6
 ###### =============================================================================
-fig = plt.figure()
-for i in range (1,23):
+#fig = plt.figure()
+for i in range (1,300):
+    fig = plt.figure()
     lon = np.degrees(df_lon.iloc[i:i+1].values.flatten())
     lat = np.degrees(df_lat.iloc[i:i+1].values.flatten())
     tec = df_vtecr.iloc[i:i+1].values.flatten()
     
-    data = {'lon' : lon,
-            'lat' : lat,
-            'tec': tec}
-    frame = pd.DataFrame(data)
-    
-    fig.add_subplot(4,6,i)
+#    fig.add_subplot(4,6,i)
     m = f1.basic_nz_map()
     x, y = m(lon, lat)
     m.hexbin(x,
@@ -120,11 +117,26 @@ for i in range (1,23):
              reduce_C_function=np.mean,
              gridsize=20, 
              cmap="viridis", 
-             vmin=-0.26, vmax=0.25)
+             vmin=-0.352, vmax=0.373)
     plt.title('tec at epoque {0}'.format(epoque1+i))
-
+# =============================================================================
+# pour faire une animation 
+# =============================================================================
 #positionnement de la colorbar
-cbaxes = fig.add_axes([0.94, 0.1, 0.01, 0.8]) 
-cb = plt.colorbar(cax = cbaxes)
-m.colorbar()
-plt.show()
+    plt.title('tec at epoque {0}'.format(epoque1+i))
+    cbaxes = fig.add_axes([0.90, 0.1, 0.01, 0.8]) 
+    cb = plt.colorbar(cax=cbaxes)
+    m.colorbar()
+    plt.gcf()
+    fig.savefig(f"/Users/antoineleblevec/Desktop/frames_30s/frame_{i:04d}.png", 
+                frameon=False, pad_inches=0)
+    cbaxes.clear()
+
+## =============================================================================
+## pour faire plusieurs snapshots en subplots 
+## =============================================================================
+##positionnement de la colorbar
+#cbaxes = fig.add_axes([0.94, 0.1, 0.01, 0.8]) 
+#cb = plt.colorbar(cax = cbaxes)
+#m.colorbar()
+#plt.show()
