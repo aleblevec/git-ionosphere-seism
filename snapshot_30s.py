@@ -102,35 +102,43 @@ print (max(df_vtecr.max()))
 ###### plot valeurs tec : -.5 -> 0.6
 ###### =============================================================================
 #fig = plt.figure()
-for i in range (1,300):
-    fig = plt.figure()
-    lon = np.degrees(df_lon.iloc[i:i+1].values.flatten())
-    lat = np.degrees(df_lat.iloc[i:i+1].values.flatten())
-    tec = df_vtecr.iloc[i:i+1].values.flatten()
-    
-#    fig.add_subplot(4,6,i)
-    m = f1.basic_nz_map()
-    x, y = m(lon, lat)
-    m.hexbin(x,
-             y,
-             C=tec,
-             reduce_C_function=np.mean,
-             gridsize=20, 
-             cmap="viridis", 
-             vmin=-0.352, vmax=0.373)
-    plt.title('tec at epoque {0}'.format(epoque1+i))
-# =============================================================================
-# pour faire une animation 
-# =============================================================================
-#positionnement de la colorbar
-    plt.title('tec at epoque {0}'.format(epoque1+i))
-    cbaxes = fig.add_axes([0.90, 0.1, 0.01, 0.8]) 
-    cb = plt.colorbar(cax=cbaxes)
-    m.colorbar()
-    plt.gcf()
-    fig.savefig(f"/Users/antoineleblevec/Desktop/frames_30s/frame_{i:04d}.png", 
-                frameon=False, pad_inches=0)
-    cbaxes.clear()
+data1 = pd.DataFrame()
+for i in range(10) : 
+    data1 = data1.append(df_vtecr['tec_{0}'.format(stations[i])])
+data1 = data1.T
+data1.plot(subplots=True, sharex=True, figsize=(20,20))
+plt.show()
+
+
+#for i in range (1,300):
+#    fig = plt.figure()
+#    lon = np.degrees(df_lon.iloc[i:i+1].values.flatten())
+#    lat = np.degrees(df_lat.iloc[i:i+1].values.flatten())
+#    tec = df_vtecr.iloc[i:i+1].values.flatten()
+#    
+##    fig.add_subplot(4,6,i)
+#    m = f1.basic_nz_map()
+#    x, y = m(lon, lat)
+#    m.hexbin(x,
+#             y,
+#             C=tec,
+#             reduce_C_function=np.mean,
+#             gridsize=20, 
+#             cmap="viridis", 
+#             vmin=-0.352, vmax=0.373)
+#    plt.title('tec at epoque {0}'.format(epoque1+i))
+## =============================================================================
+## pour faire une animation 
+## =============================================================================
+##positionnement de la colorbar
+#    plt.title('tec at epoque {0}'.format(epoque1+i))
+#    cbaxes = fig.add_axes([0.90, 0.1, 0.01, 0.8]) 
+#    cb = plt.colorbar(cax=cbaxes)
+#    m.colorbar()
+#    plt.gcf()
+#    fig.savefig(f"/Users/antoineleblevec/Desktop/frames_30s/frame_{i:04d}.png", 
+#                frameon=False, pad_inches=0)
+#    cbaxes.clear()
 
 ## =============================================================================
 ## pour faire plusieurs snapshots en subplots 

@@ -129,20 +129,20 @@ for i in range(0,len(files)) :
 ### =============================================================================
 ### Polynomial filter 
 ### =============================================================================
-        print (len(vtec))
-        window = 27
-        order = 4
-        vtec_polyn = savgol_filter(vtec, window, order)    
-        reduce_tec = vtec - vtec_polyn
+#        print (len(vtec))
+#        window = 27
+#        order = 4
+#        vtec_polyn = savgol_filter(vtec, window, order)    
+#        reduce_tec = vtec - vtec_polyn
 #        f1.polynomied_tec(time_plot,vtec_polyn,reduce_tec, sat, station, type_sat, window, order)
 #
 ## =============================================================================
 ## Plot carte traces satellites 
 ## =============================================================================
-##    f1.plot_nz(lon, lat, sat, station, lon_sat_seism, lat_sat_seism, type_sat)
-##    
-##plt.savefig('/Users/antoineleblevec/Desktop/2016_seism/traces_{1}_{0}.jpeg'.format(station,type_sat))
-##plt.show()
+    f1.plot_nz(lon, lat, sat, station, lon_sat_seism, lat_sat_seism, type_sat)
+    
+plt.savefig('/Users/antoineleblevec/Desktop/2016_seism/traces_{1}_{0}.jpeg'.format(station,type_sat))
+plt.show()
 #    
 ### =============================================================================
 ### Moving average 

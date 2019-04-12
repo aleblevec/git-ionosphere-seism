@@ -25,7 +25,7 @@ start_time = time.time()
 Re = 6371032 
 H = 350e3
 lllat = 31.7; urlat = 43.7; lllon = 130.6; urlon = 145.6
-window = 27
+window = 811
 order = 4
 epoque1 = 39600
 epoque2 = 43199
@@ -95,11 +95,24 @@ tpplon = np.arcsin(pd.np.divide(tplon,np.cos(df_lat)))
 #####
 df_lon = pd.np.add(tpplon,df_rlon)
 #
+
+# soustrait le tec des mesures de tec prises respectivement par chaque station
 df_tecr_reduit = df_tecr - df_tecr.apply(f1.minimum,axis=0)
 df_vtec = pd.np.multiply(df_tecr_reduit,np.cos(df_x))
 df_vtecf = savgol_filter(df_vtec,window,order,axis=0)
 df_vtecr = df_vtec - df_vtecf
-print(max(df_vtecr.max()))
+
+# =============================================================================
+# Plot des tecs pour voir à ce que je dois m'attendre dans les snapshots 
+# =============================================================================
+#data1 = pd.DataFrame()
+#for i in range(10) : 
+#    data1 = data1.append(df_vtecr['tec_{0}'.format(stations[i])])
+#data1 = data1.T
+#data1.plot(subplots=True, sharex=True, figsize=(20,20))
+#plt.show()
+#
+#print(min(df_vtecr.min()))
 ### min without v47b : -0.0213447610165849
 ### max withour v47b : 0.019251844721856037
 ####### =============================================================================
@@ -120,7 +133,7 @@ for i in range (1,360):
              reduce_C_function=np.mean,
              gridsize=20, 
              cmap="viridis", 
-             vmin=-0.036, vmax=0.024)
+             vmin=-0.23, vmax=0.32)
 
 #positionnement de la colorbar
     plt.title('tec at epoque {0}'.format(epoque1+a))
