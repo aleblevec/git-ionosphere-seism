@@ -41,41 +41,20 @@ files = os.listdir(rep)
 files.sort()
 os.chdir(directory)
 sat = []
-for a in range (len(files)): 
-    name = files[a].split('_')
-    sat.append(name[1])
-# =============================================================================
-# Liste de DataFrame où chaque élément correspond aux données d'une station
-# =============================================================================
 df = []
-for i in range(len(files)): 
+rlon = []
+rlat = []
+for i in range(len(files)):
+    name = files[i].split('_')
+    sat.append(name[1])
     df.append(f1.read(files[i],epoque1,epoque2))
     df[i] = df[i].set_index("tsn")
     df[i].columns = ['el_{0}'.format(sat[i]), 'az_{0}'.format(sat[i]), 'tec_{0}'.format(sat[i])]
-#
-#df.sort(key=len)
-#df1 = df[27:]
-
+    rlon.append(f1.lecture_lon(files[i]))
+    rlat.append(f1.lecture_lat(files[i]))
 dftot = reduce(lambda x, y: pd.merge(x, y, on = "tsn"), df)
-#####
-########## =============================================================================
-########## Lon et Lat des Stations 
-########## =============================================================================
-rlon = []
-rlat = []
-for k in range(len(files)) :
-    rlon.append(f1.lecture_lon(files[k]))
-    rlat.append(f1.lecture_lat(files[k]))
 df_rlat = pd.DataFrame([rlat])
 df_rlon = pd.DataFrame([rlon])
-########
-############ =============================================================================
-############ Calcul du tec réduit, de la latitude et de la longitude 
-############ =============================================================================
-#sat1=[]
-#for x in dftot : 
-#    name1 = x.split('_')
-#    sat1.append(name1[1])
 
 df_el = pd.DataFrame()
 df_az = pd.DataFrame()
