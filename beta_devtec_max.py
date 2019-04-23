@@ -14,14 +14,14 @@ from functools import reduce
 #from statistics import mean 
 
 Re = 6371032 
-H = 160e3
+H = 250e3
 lllat = 33.7; urlat = 43.7; lllon = 133.6; urlon = 150.6
 elon = 142 
 elat = 38 
 epoque1 = 21183
 epoque2 = 21883
-station = []; df = []; lon_station = []; lat_station = []; lat = []; lon= []; x = []
-lon_sip_max = []; lat_sip_max = []; teca = []; tec = []; tom = []; vtec=[]; saq = []
+station = []; df = []; lon_station = []; lat_station = []; lat = []; lon= [];
+lon_sip_max = []; lat_sip_max = []; tec = []; vtec=[]; saq = []
 df_el = pd.DataFrame(); df_az = pd.DataFrame(); df_tec = pd.DataFrame()
 
 directory = os.path.join('/Users/antoineleblevec/Desktop/G26')
@@ -72,7 +72,6 @@ def devtec(station):
 def ivtecmax(station):
     a = df_vtec['tec_{0}'.format(station)]
     a = a[devtec(station):devtec(station)+100]
-#    return a.idxmax() - (21184+devtec(station))
     return a.idxmax()
 
 #retourne la valeur du maximum de vtec
@@ -93,8 +92,8 @@ for k in station :
     lon_sip_max.append(delon(k))
     lat_sip_max.append(delat(k))
 
-
 df_param = pd.DataFrame({
+                        'saq' : saq,
                         'GPS Site' : station,
                         'VTEC max': vtec,
                         'Lon of SIP max' : np.degrees(lon_sip_max), 
@@ -110,7 +109,7 @@ m.hexbin(x,
          C=vtec,
          reduce_C_function=np.mean,
          gridsize=20, 
-         cmap="viridis")
+         cmap="plasma")
 plt.title('Max VTEC with Hion:{0} m avec seuil à 0.03'.format(H))
 cbaxes = fig.add_axes([0.90, 0.1, 0.01, 0.8]) 
 cb = plt.colorbar(cax=cbaxes)
@@ -123,9 +122,9 @@ plt.show()
 # à utiliser si points aberrants
 # =============================================================================
 #for i,a in enumerate(saq) : 
-#    if abs(mean(saq)-a) > 75 : 
+#    if abs(mean(saq)-a) > 30 : 
 #        saq.pop(i)
 #        lon_sip_max.pop(i)
 #        lat_sip_max.pop(i)
 #        station.pop(i)
-#        vtec.pop(i
+#        vtec.pop(i)

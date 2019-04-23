@@ -17,7 +17,7 @@ from functools import reduce
 from statistics import mean 
 
 Re = 6371032 
-H = 160e3
+H = 250e3
 lllat = 33.7; urlat = 43.7; lllon = 133.6; urlon = 150.6
 elon = 142 
 elat = 38 
@@ -52,25 +52,17 @@ df_el = np.radians(df_el).T
 df_az = np.radians(df_az).T
 df_tec = df_tec.T
 df_tec = df_tec - df_tec.iloc[0]
-
 df_x = np.arcsin((Re * np.cos(df_el)) / (Re + H))
 df_ksi = (np.pi / 2) - (df_el.add((df_x), fill_value=0))
-########### étapes intermédiaire de calcul
 tplat = pd.np.multiply(np.sin(df_ksi),np.cos(df_az))
 tplon = pd.np.multiply(np.sin(df_ksi),np.sin(df_az))
-###########
 df_lat = np.arcsin(pd.np.multiply(np.cos(df_ksi),np.sin(df_lat_station)) + 
                    pd.np.multiply(tplat,np.cos(df_lat_station)))
-########### étape intermédiaire de calcul
 tpplon = np.arcsin(pd.np.divide(tplon,np.cos(df_lat)))
-###########
 df_lon = pd.np.add(tpplon,df_lon_station)
-#
 df_vtec = pd.np.multiply(df_tec,np.cos(df_x))
 
-
-
-## détection de l'indice, en partant de 0, de la première apparition de l'onde en regardant le VTEC
+## détection de l'indice, en partant de 0, de la première apparition de l'onde en regardant le TEC
 def detec(station): 
     a = df_tec['tec_{0}'.format(station)]
     for i in range(len(a)): 
@@ -83,19 +75,16 @@ def detec(station):
 def itecmax(station):
     a = df_tec['tec_{0}'.format(station)]
     a = a[detec(station):detec(station)+100]
-#    return a.idxmax() - (21184+devtec(station))
     return a.idxmax()
 
-#retourne la valeur du maximum de vtec
+##retourne la valeur du maximum de vtec
 def detecmax(station):
     a = df_tec['tec_{0}'.format(station)]
     a = a[detec(station):detec(station)+100]
     return a.max()
 
-#print (devtec('0041') + 21184)
-#print(ivtecmax('0041'))
-#print(devtecmax('0041'))
-#print(df_vtec['tec_0041'].iloc[104])
+for k in station : 
+    print (itecmax(k), detecmax(k))
 
 def delon(station): 
     return df_lon['el_{0}'.format(station)].iloc[itecmax(station) - 21184]
@@ -119,7 +108,7 @@ for i,a in enumerate(saq) :
 
 df_param = pd.DataFrame({
                         'GPS Site' : station,
-                        'VTEC max': tec,
+                        'TEC max': tec,
                         'Lon of SIP max' : np.degrees(lon_sip_max), 
                         'Lat of SIP max' : np.degrees(lat_sip_max)
                         })
@@ -133,7 +122,7 @@ m.hexbin(x,
          C=tec,
          reduce_C_function=np.mean,
          gridsize=20, 
-         cmap="viridis")
+         cmap="plasma")
 plt.title('Max TEC with Hion:{0} m avec seuil à 0.035'.format(H))
 cbaxes = fig.add_axes([0.90, 0.1, 0.01, 0.8]) 
 cb = plt.colorbar(cax=cbaxes)
