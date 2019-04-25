@@ -28,14 +28,14 @@ H = 250e3
 #elon = 142 
 #elat = 38 
 pmt = 100 
-tos = 39776
-epoque1 = 40400
-epoque2 = 41100
+tos = 20783
+epoque1 = 21183
+epoque2 = 21883
 station = []; df = []; lon_station = []; lat_station = []; lat = []; lon= [];
 lon_sip_max = []; lat_sip_max = []; tec = []; vtec=[]; saq = []
 df_el = pd.DataFrame(); df_az = pd.DataFrame(); df_tec = pd.DataFrame()
 
-directory = os.path.join('/Users/antoineleblevec/Desktop/kaikura_G20_1s_bis')
+directory = os.path.join('/Users/antoineleblevec/Desktop/tohoku_1s_G21')
 rep = os.path.abspath(os.path.expanduser(directory))
 files = os.listdir(rep) 
 files.sort()
@@ -76,7 +76,7 @@ df_vtec = pd.np.multiply(df_tec,np.cos(df_x))
 def devtec(station): 
     a = df_vtec['tec_{0}'.format(station)]
     for i in range(len(a)-1): 
-        if abs(a.iloc[i+1]-a.iloc[i]) > 0.025:
+        if abs(a.iloc[i+1]-a.iloc[i]) > 0.03:
             break
     return i
 
