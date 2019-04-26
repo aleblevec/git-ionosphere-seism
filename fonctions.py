@@ -335,7 +335,7 @@ def hodor(lon, lat, sat):
 #
 #
 ## =============================================================================
-## Création de la carte du  Japon ; rajouter rlon, rlat et station dans les paramètres 
+## Création de la carte du  Japon ; rajouter lon_station, lat_station et station dans les paramètres 
 ## pour voir les stations sur la carte 
 ## =============================================================================
 def basic_japan_map(lllat, urlat, lllon, urlon, elon, elat) : 
@@ -352,8 +352,8 @@ def basic_japan_map(lllat, urlat, lllon, urlon, elon, elat) :
     expt, eypt = m(elon,elat)
     m.plot(expt,eypt,'r*', ms = 7)
     
-#    for j in range (len(rlon)) : 
-#        xpt,ypt = m(rlon[j],rlat[j])
+#    for j in range (len(lon_station)) : 
+#        xpt,ypt = m(lon_station[j],lat_station[j])
 #        m.plot(xpt,ypt,'wo', ms = 3) 
 #        plt.text(xpt+10000,ypt+10000,'%s' %station[j], color = 'white', fontsize = 5)
      
@@ -375,8 +375,6 @@ def plot_japan(lllat, urlat, lllon, urlon, lon, lat,station) :
     jap = m.plot(x, y)
     plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left', 
                borderaxespad=0., fancybox = True, shadow = True)
-    
-
     
     return jap 
 
