@@ -37,10 +37,10 @@ pmt = 100
 tos = 20783
 epoque1 = 21183
 epoque2 = 21883
-sat = 'G27'
+sat = 'G05'
 
 station = []; station1 = []; df = []; lon_station = []; lat_station = []; lat = []; lon= [];
-lon_sip_max = []; lat_sip_max = []; tec = []; vtec=[]; saq = []
+lon_sip_max = []; lat_sip_max = []; tec = []; vtec=[]; saq = [];
 df_el = pd.DataFrame(); df_az = pd.DataFrame(); df_tec = pd.DataFrame()
 
 directory = os.path.join('/Users/antoineleblevec/Desktop/tohoku_1s_{0}'.format(sat))
@@ -51,19 +51,26 @@ os.chdir(directory)
 
 for i in range(len(files)):
     name = files[i].split('_')
-    station.append(name[0])
-    df.append(f1.read(files[i],epoque1,epoque2))
+    a = f1.read(files[i],epoque1,epoque2)
+    if len(a) > 10: 
+        df.append(f1.read(files[i],epoque1,epoque2))
+        station.append(name[0])
+        
+for i in range (len(df)):    
     df[i] = df[i].set_index("tsn")
     df[i].columns = ['el_{0}'.format(station[i]), 'az_{0}'.format(station[i]), 'tec_{0}'.format(station[i])]
     lon_station.append(f1.lecture_lon(files[i]))
     lat_station.append(f1.lecture_lat(files[i]))
+    
 dftot = reduce(lambda x, y: pd.merge(x, y, on = "tsn"), df)
-df_lat_station = pd.DataFrame([lat_station])
-df_lon_station = pd.DataFrame([lon_station])
-for j in range(len(files)):
+
+for j in range(len(df)):
     df_el = df_el.append(dftot['el_{0}'.format(station[j])])
     df_az = df_az.append(dftot['az_{0}'.format(station[j])])
     df_tec = df_tec.append(dftot['tec_{0}'.format(station[j])])
+    
+df_lat_station = pd.DataFrame([lat_station])
+df_lon_station = pd.DataFrame([lon_station])
 df_el = np.radians(df_el).T
 df_az = np.radians(df_az).T
 df_tec = df_tec.T
@@ -108,53 +115,49 @@ def delat(station):
 # =============================================================================
 # Plot des vtec de toutes les stations pour le satellite
 # =============================================================================
-#fig = plt.figure()
-#for k in station : 
-#   df_vtec['tec_{0}'.format(k)].plot()
+#df_vtec.plot()
 #plt.show()
-df_vtec.plot()
-plt.show()
 
 # =============================================================================
 # Plot des maximum de VTEC 
 # =============================================================================
-#for k in station : 
-#    a = devtec(k)+ (epoque1 - tos + 1)
-#    if a < 700: 
-#        saq.append(devtec(k)+ (epoque1 - tos + 1))
-#        vtec.append(devtecmax(k))
-#        lon_sip_max.append(delon(k))
-#        lat_sip_max.append(delat(k))
-#        station1.append(k)
-#df_param = pd.DataFrame({
-#                'saq' : saq,
-#                'GPS Site' : station1,
-#                'VTEC max': vtec,
-#                'Lon of SIP max' : np.degrees(lon_sip_max), 
-#                'Lat of SIP max' : np.degrees(lat_sip_max)
-#                })
-#print(df_param.describe())
-#fig = plt.figure()
-#m = f1.basic_japan_map(lllat, urlat, lllon, urlon, elon, elat) 
-#x, y = m(np.degrees(lon_sip_max), np.degrees(lat_sip_max))
-#m.hexbin(x,
-#         y,
-#         C=vtec,
-#         reduce_C_function=np.mean,
-#         gridsize=20, 
-#         cmap="plasma")
-#plt.title('Max VTEC with Hion:{0} m avec seuil à 0.03 pour {1}'.format(H,sat))
-#cbaxes = fig.add_axes([0.90, 0.1, 0.01, 0.8]) 
-#cb = plt.colorbar(cax=cbaxes)
-#m.colorbar()
-#plt.gcf()
-#plt.show()
+for k in station : 
+    a = devtec(k)+ (epoque1 - tos + 1)
+    if a < 700: 
+        saq.append(devtec(k)+ (epoque1 - tos + 1))
+        vtec.append(devtecmax(k))
+        lon_sip_max.append(delon(k))
+        lat_sip_max.append(delat(k))
+        station1.append(k)
+df_param = pd.DataFrame({
+                'saq' : saq,
+                'GPS Site' : station1,
+                'VTEC max': vtec,
+                'Lon of SIP max' : np.degrees(lon_sip_max), 
+                'Lat of SIP max' : np.degrees(lat_sip_max)
+                })
+print(df_param.describe())
+fig = plt.figure()
+m = f1.basic_japan_map(lllat, urlat, lllon, urlon, elon, elat) 
+x, y = m(np.degrees(lon_sip_max), np.degrees(lat_sip_max))
+m.hexbin(x,
+         y,
+         C=vtec,
+         reduce_C_function=np.mean,
+         gridsize=20, 
+         cmap="plasma")
+plt.title('Max VTEC with Hion:{0} m avec seuil à 0.03 pour {1}'.format(H,sat))
+cbaxes = fig.add_axes([0.90, 0.1, 0.01, 0.8]) 
+cb = plt.colorbar(cax=cbaxes)
+m.colorbar()
+plt.gcf()
+plt.show()
 
 ## =============================================================================
-## À utiliser pour ploter les stations
+## À utiliser pour ploter les stations ; rajouter dans fonctions.py lon_station, lat_station, station
 ## =============================================================================
-##lon_station = np.degrees(lon_station)
-##lat_station = np.degrees(lat_station)
-##fig = plt.figure()
-##m = f1.basic_japan_map(lllat, urlat, lllon, urlon, elon, elat, lon_station, lat_station, station)
-##plt.show()
+#lon_station = np.degrees(lon_station)
+#lat_station = np.degrees(lat_station)
+#fig = plt.figure()
+#m = f1.basic_japan_map(lllat, urlat, lllon, urlon, elon, elat, lon_station, lat_station, station)
+#plt.show()

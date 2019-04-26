@@ -336,7 +336,7 @@ def hodor(lon, lat, sat):
 #
 ## =============================================================================
 ## Création de la carte du  Japon ; rajouter lon_station, lat_station et station dans les paramètres 
-## pour voir les stations sur la carte 
+## pour voir les stations sur la carte et décommenter l'itération
 ## =============================================================================
 def basic_japan_map(lllat, urlat, lllon, urlon, elon, elat) : 
     m = Basemap(projection='stere', 
