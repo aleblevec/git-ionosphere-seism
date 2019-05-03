@@ -183,7 +183,8 @@ if saq :
     m.colorbar()
     plt.gcf()
     plt.show()
-  
+
+# paramètres généraux des données 
 df_param = pd.DataFrame({
                 'saq' : saq,
 #                'GPS Site' : col_names_station,
@@ -192,24 +193,21 @@ df_param = pd.DataFrame({
                 'Lat of SIP max' : np.degrees(lat_sip_max)
                 })
 print(df_param.describe())
-#
-#
-##
-### =============================================================================
-### Plot des vtec de toutes les stations pour le satellite
-### =============================================================================
-###df_vtec.plot()
-###plt.show()
-#
-#
-#### =============================================================================
-#### À utiliser pour ploter les stations ; rajouter dans fonctions.py lon_station, lat_station, station
-#### =============================================================================
-###lon_station = np.degrees(lon_station)
-###lat_station = np.degrees(lat_station)
-###fig = plt.figure()
-###m = f1.basic_japan_map(lllat, urlat, lllon, urlon, elon, elat, lon_station, lat_station, station)
-###plt.show()
-#
-#stop = timeit.default_timer()
-#print ('Time: ', stop-start)
+
+# =============================================================================
+# Plot des vtec de toutes les stations pour le satellite
+# =============================================================================
+#df_vtec.plot()
+#plt.show()
+
+# =============================================================================
+# À utiliser pour ploter les stations ; rajouter dans fonctions.py lon_station, lat_station, station
+# =============================================================================
+#lon_station = np.degrees(lon_station)
+#lat_station = np.degrees(lat_station)
+#fig = plt.figure()
+#m = f1.basic_japan_map(lllat, urlat, lllon, urlon, elon, elat, lon_station, lat_station, station)
+#plt.show()
+
+stop = timeit.default_timer()
+print ('Time: ', stop-start)
