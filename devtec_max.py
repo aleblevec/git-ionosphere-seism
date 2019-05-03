@@ -30,7 +30,7 @@ start = timeit.default_timer()
 # Constantes
 # =============================================================================
 Re = 6371032 
-# assumed 
+# hauteur max ionisation (à changer) 
 H = 250e3
 # pour basemap
 lllat = 33.7; urlat = 43.7; lllon = 133.6; urlon = 150.6
@@ -41,9 +41,10 @@ pmt = 100
 tos = 20783
 epoque1 = 21183
 epoque2 = 21883
+# seuil de detection
 valeur_inf_seuil = 0.031
 valeur_sup_seuil = 0.033
-sat = 'G12'
+sat = 'G26'
 
 station = []; station1 = []; df = []; lon_station = []; lat_station = []; lat = []; lon= [];
 lon_sip_max = []; lat_sip_max = []; tec = []; vtec=[]; saq = [];
@@ -58,22 +59,25 @@ os.chdir(directory)
 for i in range(len(files)):
     name = files[i].split('_')
     a = f1.read(files[i],epoque1,epoque2)
-    if len(a) < 10 :  
+    if len(a) < 10 :
         continue 
     else :
         df.append(f1.read(files[i],epoque1,epoque2))
         station.append(name[0])
-    if len(df) == 0 : 
+
+if len(df) == 0 : 
         sys.exit("mauvais sat")
-        
+
 for i in range (len(df)):    
     df[i] = df[i].set_index("tsn")
     df[i].columns = ['el_{0}'.format(station[i]), 'az_{0}'.format(station[i]), 'tec_{0}'.format(station[i])]
     lon_station.append(f1.lecture_lon(files[i]))
     lat_station.append(f1.lecture_lat(files[i]))
-    
-dftot = reduce(lambda x, y: pd.merge(x, y, on = "tsn"), df)
 
+    
+#dftot = reduce(lambda x, y: pd.merge(x,y,on="tsn"),df)
+dftot = reduce(lambda x, y: pd.merge(x,y,on="tsn",how='outer'),df)
+#
 for j in range(len(df)):
     df_el = df_el.append(dftot['el_{0}'.format(station[j])])
     df_az = df_az.append(dftot['az_{0}'.format(station[j])])

@@ -4,6 +4,8 @@
 Created on Tue Mar 26 10:39:41 2019
 
 @author: antoineleblevec
+Programme utilisé avant la découverte de Panda 
+Pas sur qu'il soit encore utile
 """
 # =============================================================================
 # Modules à importer
