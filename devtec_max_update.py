@@ -21,9 +21,9 @@ import matplotlib.pyplot as plt
 import fonctions as f1
 import sys
 import timeit 
-import math
+#import math
 from functools import reduce
-from statistics import mean 
+#from statistics import mean 
 
 start = timeit.default_timer()
 
@@ -36,7 +36,7 @@ H = 250e3
 lllat = 33.7; urlat = 43.7; lllon = 133.6; urlon = 150.6
 # epicentre du séisme 
 elon = 142 ; elat = 38 
-# period of observation
+# period of observation : à changer en fonction du séisme étudié 
 propagation_period = 100 
 tos = 20783
 epoque1 = 21183
@@ -45,10 +45,10 @@ epoque2 = 21883
 valeur_inf_seuil = 0.031
 valeur_sup_seuil = 0.033
 # satelite choisi
-sat = 'G22'
+sat = 'G26'
 # Listes et dataframes
-station = []; df = []; lon_station = []; lat_station = []; lat = []; lon= [];
-lon_sip_max = []; lat_sip_max = []; tec = []; vtec=[]; saq = [];
+station = []; df = []; lon_station = []; lat_station = [];
+lon_sip_max = []; lat_sip_max = []; vtec=[]; saq = [];
 df_el = pd.DataFrame(); df_az = pd.DataFrame(); df_tec = pd.DataFrame()
 
 # =============================================================================
@@ -183,19 +183,19 @@ if saq :
     m.colorbar()
     plt.gcf()
     plt.show()
-
-# paramètres généraux des données 
-df_param = pd.DataFrame({
-                'saq' : saq,
-#                'GPS Site' : col_names_station,
-                'VTEC max': vtec,
-                'Lon of SIP max' : np.degrees(lon_sip_max), 
-                'Lat of SIP max' : np.degrees(lat_sip_max)
-                })
-print(df_param.describe())
+#
+## paramètres généraux des données 
+#df_param = pd.DataFrame({
+#                'saq' : saq,
+##                'GPS Site' : col_names_station,
+#                'VTEC max': vtec,
+#                'Lon of SIP max' : np.degrees(lon_sip_max), 
+#                'Lat of SIP max' : np.degrees(lat_sip_max)
+#                })
+#print(df_param.describe())
 
 # =============================================================================
-# Plot des vtec de toutes les stations pour le satellite
+# Graphe des vtec de toutes les stations pour le satellite
 # =============================================================================
 #df_vtec.plot()
 #plt.show()

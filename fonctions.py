@@ -25,6 +25,17 @@ import pandas as pd
 
 
 # =============================================================================
+# Objet itérable ? 
+# =============================================================================
+def isiterable(objet):
+    try: 
+        iter(objet)
+        return True 
+    except TypeError:
+        return False 
+
+
+# =============================================================================
 # Varion TEC and VTEC from RINEX fonction
 # =============================================================================
 def tec(d, courbe_1, courbe_2, sat, station, type_sat) : 
