@@ -2,28 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 Created on Tue May  7 14:41:45 2019
-
 @author: antoineleblevec
-"""
-
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Tue May  7 14:03:24 2019
-
-@author: antoineleblevec
-"""
-
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-
-"""
-Created on Wed Apr 17 15:18:58 2019
-
-@author: antoineleblevec
-
-Changer de répertoire en fonction du set de données étudié
-
 
 Pour séisme de Tohoku, le séisme a eu lieu à l'époque 20 783 ; donc prendre entre 21 183 et 21 883 
 Pour séisme de Kaikura, le séisme a eu lieu à l'époque  39 776 ; donc prendre entre 39 076 et 43 199
