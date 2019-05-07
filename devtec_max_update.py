@@ -1,5 +1,21 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+"""
+Created on Tue May  7 14:41:45 2019
+
+@author: antoineleblevec
+"""
+
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Tue May  7 14:03:24 2019
+
+@author: antoineleblevec
+"""
+
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 
 """
 Created on Wed Apr 17 15:18:58 2019
@@ -13,8 +29,12 @@ Pour séisme de Tohoku, le séisme a eu lieu à l'époque 20 783 ; donc prendre 
 Pour séisme de Kaikura, le séisme a eu lieu à l'époque  39 776 ; donc prendre entre 39 076 et 43 199
 
 tos : time of seism
-propogation_period : temps pendant lequel on recherche le maximum de TEC après la première détection de l'onde acoustisque (?)
-pour l'instant l'algorithme supprime toutes les stations qui ont enregistré un 0 ou un NA 
+p_p : propagation_period temps pendant lequel on recherche le maximum de TEC après la première détection de l'onde acoustisque (?)
+pour l'instant l'algorithme supprime toutes les stations qui ont enregistré un 0 ou un NA
+e1 : epoque1
+e2 : epoque2 
+v_i_s: valeur_inf_seuil
+v_s_s : valeur_sup_seuil 
 """
 import os
 import pandas as pd
@@ -39,15 +59,15 @@ lllat = 33.7; urlat = 43.7; lllon = 133.6; urlon = 150.6
 # epicentre du séisme 
 elon = 142 ; elat = 38 
 # period of observation : à changer en fonction du séisme étudié 
-propagation_period = 100 
+p_p = 100 
 tos = 20783
-epoque1 = 21183
-epoque2 = 21883
+e1 = 21183
+e2 = 21883
 # seuil de detection
-valeur_inf_seuil = 0.031
-valeur_sup_seuil = 0.033
+v_i_s = 0.031
+v_s_s = 0.033
 # satelite choisi
-sat = 'G18'
+sat = 'G26'
 # Listes et dataframes
 station = []; df = []; lon_station = []; lat_station = [];
 lon_sip_max = []; lat_sip_max = []; vtec=[]; saq = [];
@@ -66,14 +86,14 @@ os.chdir(directory)
 # lecture des données et stockage des latitudes et longitudes des stations présentes
 for file in files:
     name = file.split('_')
-    da_fr = f1.read(file,epoque1,epoque2)
+    da_fr = f1.read(file,e1,e2)
     if len(da_fr) < 10 :
         continue 
     else :
         df.append(da_fr)
         station.append(name[0])
-        lon_station.append(f1.lecture_lon(file))
-        lat_station.append(f1.lecture_lat(file))
+        lon_station.append(f1.lecture_lat_lon(file)[1])
+        lat_station.append(f1.lecture_lat_lon(file)[0])
 
 df_lat_station = pd.DataFrame([lat_station])
 df_lon_station = pd.DataFrame([lon_station])
@@ -126,32 +146,12 @@ df_x = df_x.dropna()
 df_vtec = pd.np.multiply(df_tec,np.cos(df_x))
 
 # =============================================================================
-# Fonctions pour plotter le TEC et les SIP
-# =============================================================================
-# détection de la première onde, en prenant les indices à partir de 0. 
-def detec_first_onde(station): 
-    a = df_vtec['tec_{0}'.format(station)]
-    for i in range(len(a)-1): 
-        if abs(a.iloc[i+1]-a.iloc[i]) > valeur_inf_seuil and abs(a.iloc[i+1]-a.iloc[i]) < valeur_sup_seuil :
-            break
-    return i
-
-# retourne le maximum de vtec avec la longitude et latitue correspondante, 100s après la détection de la première onde
-def lon_lat_tecmax(station):
-    a = df_vtec['tec_{0}'.format(station)]
-    a = a[detec_first_onde(station) : detec_first_onde(station)+propagation_period]
-    indice_tec = a.idxmax() - (epoque1+1)
-    lon_max = df_lon['el_{0}'.format(station)].iloc[indice_tec]
-    lat_max = df_lat['el_{0}'.format(station)].iloc[indice_tec]
-    return lon_max, lat_max, a.max()
-
-# =============================================================================
 # Plot des données
 # =============================================================================
 for k in col_names_station : 
-    tod = detec_first_onde(k)+ (epoque1-tos+1)  
+    tod = f1.detec_first_onde(k,df_vtec,v_i_s,v_s_s)+ (e1-tos+1)  
     if tod < 700: 
-        lon_max, lat_max, tec_max = lon_lat_tecmax(k)
+        lon_max, lat_max, tec_max = f1.lon_lat_tecmax(k,df_vtec,p_p,e1,df_lon,df_lat,v_i_s,v_s_s)
         saq.append(tod)
         vtec.append(tec_max)
         lon_sip_max.append(lon_max)
@@ -160,22 +160,9 @@ for k in col_names_station :
 if not saq: 
     print ("Pas d'onde acoustique détectée à la suite du séisme.")
 if saq : 
-    fig = plt.figure()
-    m = f1.basic_japan_map(lllat, urlat, lllon, urlon, elon, elat) 
-    x, y = m(np.degrees(lon_sip_max), np.degrees(lat_sip_max))
-    m.hexbin(x,
-             y,
-             C=vtec,
-             reduce_C_function=np.mean,
-             gridsize=20, 
-             cmap="plasma")
-    plt.title('Max VTEC with Hion:{0}m ; {1}<seuil<{2} ; sat:{3}'.format(H, valeur_inf_seuil, valeur_sup_seuil, sat))
-    cbaxes = fig.add_axes([0.90, 0.1, 0.01, 0.8]) 
-    cb = plt.colorbar(cax=cbaxes)
-    m.colorbar()
-    plt.gcf()
-    plt.show()
-#
+    m = f1.japan_map(lllat,urlat,lllon,urlon,elon,elat,lon_sip_max,lat_sip_max,vtec,
+              H,v_i_s,v_s_s,sat)
+
 ## paramètres généraux des données 
 #df_param = pd.DataFrame({
 #                'saq' : saq,
