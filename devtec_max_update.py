@@ -153,12 +153,6 @@ if saq :
 #print(df_param.describe())
 
 # =============================================================================
-# Graphe des vtec de toutes les stations pour le satellite
-# =============================================================================
-#df_vtec.plot()
-#plt.show()
-
-# =============================================================================
 # À utiliser pour ploter les stations ; rajouter dans fonctions.py lon_station, lat_station, station
 # =============================================================================
 #lon_station = np.degrees(lon_station)
