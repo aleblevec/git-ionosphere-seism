@@ -41,6 +41,20 @@ def read(files, epoque1, epoque2):
     return df[df["tsn"] < epoque2]
 
 # =============================================================================
+# DataFrames from Sound_speed
+# =============================================================================
+def read_sound(files):
+    df = pd.read_csv(
+            files,
+            delim_whitespace=True,
+            header=None,
+            names=['a','b','H','c','Cs','d','e']
+            )
+    
+    df = df[['H','Cs']]
+    
+    return df
+# =============================================================================
 # Latitude et longitude station from RINEX
 # =============================================================================
 def lecture_lat_lon(files): 
