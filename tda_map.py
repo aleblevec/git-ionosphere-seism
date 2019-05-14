@@ -135,7 +135,8 @@ df_vtec = pd.np.multiply(df_tec,np.cos(df_x))
 # Plot des données
 # =============================================================================
 for k in col_names_station : 
-    print(f1.tda(k,df_vtec,v_i_s,v_s_s))
+    tod = f1.tda(k,df_vtec,v_i_s,v_s_s)) + (e1-tos+1)
+    tda.append(tod)
 
 print (df_vtec.iloc[0])
 
