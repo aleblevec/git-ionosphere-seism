@@ -4,6 +4,14 @@
 Created on Tue Mar 12 11:34:21 2019
 
 @author: antoineleblevec
+
+ajouter :     for j in range (len(col_names_station)):
+        xpt,ypt = m(np.degrees(lo_station[j]),np.degrees(la_station[j]))
+        m.plot(xpt,ypt,'wo', ms = 1) 
+        plt.text(xpt+10000,ypt+10000,'%s' %col_names_station[j], color = 'white', fontsize = 5)
+
+    => pour plotter les stations sur la carte 
+
 """
 
 # =============================================================================
@@ -74,7 +82,7 @@ def lecture_lat_lon(files):
 ## =============================================================================
 ## Basemap Japan ; rajouter lon_station, lat_station et station dans les paramètres 
 ## pour voir les stations sur la carte et décommenter l'itération
-def japan_map(lllat,urlat,lllon,urlon,elon,elat,lon_sip_max,lat_sip_max,vtec,
+def japan_map(lllat,urlat,lllon,urlon,elon,elat,lon_sip_max,lat_sip_max,tda,
               H,v_i_s,v_s_s,sat) : 
     fig = plt.figure()
     m = Basemap(projection='stere', 
@@ -92,9 +100,9 @@ def japan_map(lllat,urlat,lllon,urlon,elon,elat,lon_sip_max,lat_sip_max,vtec,
     x, y = m(np.degrees(lon_sip_max), np.degrees(lat_sip_max))
     m.hexbin(x,
              y,
-             C=vtec,
+             C=tda,
              reduce_C_function=np.mean,
-             gridsize=20, 
+             gridsize=30, 
              cmap="plasma")
     plt.title('Max VTEC Hion: {0}m ; {1}<seuil<{2} ; sat: {3}'.format(H,v_i_s,v_s_s,sat))
     cbaxes = fig.add_axes([0.90,0.15,0.01,0.7]) 
@@ -106,13 +114,19 @@ def japan_map(lllat,urlat,lllon,urlon,elon,elat,lon_sip_max,lat_sip_max,vtec,
     return m 
 
 
+
+
+
 # détection de la première onde, en prenant les indices à partir de 0. 
-def detec_first_onde(station,df_vtec,v_i_s,v_s_s): 
+def detec_first_onde(station,df_vtec,v_i_s,v_s_s,df_lon,df_lat): 
     a = df_vtec['tec_{0}'.format(station)]
     for i in range(len(a)-1): 
         if abs(a.iloc[i+1]-a.iloc[i]) > v_i_s and abs(a.iloc[i+1]-a.iloc[i]) < v_s_s :
             break
-    return i
+    lon_tda = df_lon['el_{0}'.format(station)].iloc[i]
+    lat_tda = df_lat['el_{0}'.format(station)].iloc[i]
+    vtec_tda = a.iloc[i]
+    return i, lon_tda, lat_tda, vtec_tda
 
 # max vtec avec longitude et latitude correspondante, 100s après la détection de la première onde
 def lon_lat_tecmax(station,df_vtec,p_p,e1,df_lon,df_lat,v_i_s,v_s_s):

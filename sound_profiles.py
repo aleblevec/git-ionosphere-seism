@@ -10,6 +10,8 @@ import fonctions as f1
 import pandas as pd
 from functools import reduce
 import matplotlib.pyplot as plt
+import sys
+import numpy as np
 
 #import pandas as pd 
 
@@ -35,20 +37,28 @@ df_250['H'] = df_250['H'] - 6371
 df_300['H'] = df_300['H'] - 6371
 df_350['H'] = df_350['H'] - 6371
 
-df = [df_50, df_100, df_150, df_200, df_250, df_300, df_350]
-dftot = reduce(lambda x, y: pd.merge(x,y,on="H",how='outer'),df)
-dftot.columns = ['H','Cs_50','Cs_100','Cs_150', 'Cs_200', 'Cs_250', 'Cs_300', 'Cs_350']
-#dftot = dftot.set_index('H')
-Cs = ['Cs_50','Cs_100','Cs_150', 'Cs_200', 'Cs_250', 'Cs_300', 'Cs_350']
-fig,ax = plt.subplots()
-for i in Cs:
-    dftot.plot(
-            ax=ax,
-            y='H',
-            x=i)
-    ax.legend(Cs)
-    ax.set(xlabel="Cs", ylabel="Hauteur")
-plt.show()
+#df_50.to_csv('/Users/antoineleblevec/Desktop/sound_speed/sound_speed_F50.txt',
+#             index=False,
+#             header=False,
+#             sep=' ',
+#             mode="a"
+#             )
+np.savetxt('/Users/antoineleblevec/Desktop/sound_speed/sound_speed_F50.txt', df_50.values, fmt='%g')
+
+#df = [df_50, df_100, df_150, df_200, df_250, df_300, df_350]
+#dftot = reduce(lambda x, y: pd.merge(x,y,on="H",how='outer'),df)
+#dftot.columns = ['H','Cs_50','Cs_100','Cs_150', 'Cs_200', 'Cs_250', 'Cs_300', 'Cs_350']
+##dftot = dftot.set_index('H')
+#Cs = ['Cs_50','Cs_100','Cs_150', 'Cs_200', 'Cs_250', 'Cs_300', 'Cs_350']
+#fig,ax = plt.subplots()
+#for i in Cs:
+#    dftot.plot(
+#            ax=ax,
+#            y='H',
+#            x=i)
+#    ax.legend(Cs)
+#    ax.set(xlabel="Cs", ylabel="Hauteur")
+#plt.show()
 
 
 
