@@ -113,7 +113,7 @@ def japan_map(lllat,urlat,lllon,urlon,elon,elat,lon_sip_max,lat_sip_max,tda,
     
     return m 
 
-def tda(station,df_vtec,v_i_s,v_s_s,df_lon,df_lat): 
+def tda(station,df_vtec,v_i_s,v_s_s): 
     a = df_vtec['tec_{0}'.format(station)]
     for i in range(len(a)-1): 
         if abs(a.iloc[i+1]-a.iloc[i]) > v_i_s and abs(a.iloc[i+1]-a.iloc[i]) < v_s_s :
