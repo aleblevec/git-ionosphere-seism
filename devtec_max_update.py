@@ -39,19 +39,19 @@ start = timeit.default_timer()
 Re = 6371032 
 H = 187e3
 # latitude et longitude pour la carte désirée 
-lllat = 31.7; urlat = 45.7; lllon = 131.6; urlon = 152.6
+# lllat = 31.7; urlat = 45.7; lllon = 131.6; urlon = 152.6
 # epicentre du séisme 
 elon = 142 ; elat = 38 
 # period of observation : à changer en fonction du séisme étudié 
 p_p = 100 
-tos = 9900
-e1 = 10200
-e2 = 10900
+tos = 1798
+e1 = 1800
+e2 = 1850
 # seuil de detection
-v_i_s = 0.031
-v_s_s = 0.033
+v_i_s = 0.0300
+v_s_s = 0.0305
 # satelite choisi
-sat = 'G10'
+# sat = 'G05'
 # Listes et dataframes
 station = []; df = []; lon_station = []; lat_station = [];
 lon_sip_max = []; lat_sip_max = []; vtec=[]; saq = [];
@@ -62,7 +62,7 @@ vtec_sip_tda = []; lon_sip_tda = []; lat_sip_tda = [] ; tda = []
 # Accès, lecture des données et création des DataFrames
 # =============================================================================
 # chemin vers données
-directory = os.path.join('/Users/antoineleblevec/Desktop/tohoku_1s/tohoku_1s_{0}'.format(sat))
+directory = os.path.join('/Users/antoineleblevec/Desktop/2004_article')
 rep = os.path.abspath(os.path.expanduser(directory))
 files = os.listdir(rep) 
 files.sort()

@@ -10,18 +10,18 @@ from os import mkdir
 import shutil
 
 year = '2011' 
-jday = '070' 
+jday = '068' 
 seism = 'tohoku'
 sate = []
 
-directory = os.path.join('/Users/antoineleblevec/Desktop/tec-suite-master_2/tec/{0}/{1}'.format(year,jday))
+directory = os.path.join('/Users/antoineleblevec/Desktop/tec-suite-master/tec/{0}/{1}'.format(year,jday))
 rep = os.path.abspath(os.path.expanduser(directory))
 stations = os.listdir(rep) 
 stations.sort()
 os.chdir(directory)
 
 for k in stations: 
-    directory1 = os.path.join('/Users/antoineleblevec/Desktop/tec-suite-master_2/tec/{0}/{1}/{2}'.format(year,jday,k))
+    directory1 = os.path.join('/Users/antoineleblevec/Desktop/tec-suite-master/tec/{0}/{1}/{2}'.format(year,jday,k))
     rep1 = os.path.abspath(os.path.expanduser(directory1))
     sat_station = os.listdir(rep1) 
     sat_station.sort()
